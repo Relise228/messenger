@@ -12,7 +12,7 @@ function Sidebar() {
   const [chats, setChats] = useState([]);
   const [searchChats, setSearchChats] = useState([]);
   const [searchValue, setSearchValue] = useState('');
-  const chatItems = searchValue ? searchChats : chats;
+  const chatItems = searchValue !== '' ? searchChats : chats;
 
   useEffect(() => {
     db.collection('chats').onSnapshot((snapshot) => {
@@ -27,12 +27,15 @@ function Sidebar() {
 
   const addChat = () => {
     const chatName = prompt('Please enter a chat name');
-    db.collection('chats').add({
-      chatName: chatName,
-    });
+    if (chatName) {
+      db.collection('chats').add({
+        chatName: chatName,
+      });
+    }
   };
 
   const searchChat = (e) => {
+    console.log(chats[0].data.chatName);
     setSearchValue(e.target.value);
     setSearchChats([
       ...chats.filter((chat) =>
